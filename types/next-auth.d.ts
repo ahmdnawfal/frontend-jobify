@@ -4,6 +4,8 @@ import { JWT } from 'next-auth/jwt';
 declare module 'next-auth' {
   interface User {
     token: string;
+    refreshToken: string;
+    accessTokenExpiration: number;
     user: {
       _id: string;
       email: string;
@@ -12,6 +14,8 @@ declare module 'next-auth' {
       location: string;
       role: string;
       token: string;
+      refreshToken: string;
+      exp: number;
     };
   }
 }
@@ -26,6 +30,9 @@ declare module 'next-auth' {
       location: string;
       role: string;
       token: string;
+      refreshToken: string;
+      accessTokenExpiration: number;
+      exp: number;
     };
   }
 }
@@ -39,5 +46,8 @@ declare module 'next-auth/jwt' {
     location: string;
     role: string;
     token: string;
+    refreshToken: string;
+    accessTokenExpiration: number;
+    exp: number;
   }
 }

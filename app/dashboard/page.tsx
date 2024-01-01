@@ -28,15 +28,15 @@ const getDataStatsAdmin = async (token: string) => {
 const Page = async () => {
   const session = await useAuthSession();
 
-  if (session?.role === 'user') {
-    return (
-      <div className='w-full h-[550px] mt-8'>
-        <Carts />
-      </div>
-    );
-  }
+  // if (session?.role === 'user') {
+  //   return (
+  //     <div className='w-full h-[550px] mt-8'>
+  //       <Carts />
+  //     </div>
+  //   );
+  // }
 
-  const dataStatsAdmin = await getDataStatsAdmin(session?.token ?? '');
+  // const dataStatsAdmin = await getDataStatsAdmin(session?.token ?? '');
 
   return (
     <div>
@@ -49,7 +49,7 @@ const Page = async () => {
             <div className='flex gap-6 items-center'>
               <PiUsersThreeLight className='text-4xl' />
               <p className='text-lg'>
-                {dataStatsAdmin?.users.toLocaleString()}
+                {/* {dataStatsAdmin?.users.toLocaleString()} */}
               </p>
             </div>
           </CardContent>
@@ -61,7 +61,7 @@ const Page = async () => {
           <CardContent>
             <div className='flex gap-6 items-center'>
               <BsPersonWorkspace className='text-4xl' />
-              <p className='text-lg'>{dataStatsAdmin?.jobs.toLocaleString()}</p>
+              {/* <p className='text-lg'>{dataStatsAdmin?.jobs.toLocaleString()}</p> */}
             </div>
           </CardContent>
         </Card>
