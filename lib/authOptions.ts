@@ -105,8 +105,6 @@ const authOptions: AuthOptions = {
       session.user = token;
       session.expires = formattedDate;
 
-      console.log(session);
-
       return session;
     },
   },
