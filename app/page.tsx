@@ -1,16 +1,8 @@
 import Link from 'next/link';
 import main from '@/assets/images/main.svg';
 import Image from 'next/image';
-import useAuthSession from '@/lib/useAuthSession';
-import { redirect } from 'next/navigation';
 
 export default async function Home() {
-  const session = await useAuthSession();
-
-  if (session) {
-    redirect('/dashboard');
-  }
-
   return (
     <div className='max-w-5xl px-4 m-auto relative'>
       <nav className='py-5 absolute'>

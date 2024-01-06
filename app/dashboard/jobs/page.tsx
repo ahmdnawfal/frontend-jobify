@@ -3,7 +3,6 @@ import DeleteJob from '@/components/delete-job';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import UpdateJob from '@/components/update-job';
-import useAuthSession from '@/lib/useAuthSession';
 import { Tjobs } from '@/types';
 import { IoLocationOutline, IoCalendarOutline } from 'react-icons/io5';
 import { PiBagDuotone } from 'react-icons/pi';
@@ -15,6 +14,8 @@ import Search from '@/components/search';
 import { Metadata } from 'next';
 import FilterSelect from '@/components/filter-select';
 import { JOB_SORT, JOB_STATUS, JOB_TYPE } from '@/lib/constants';
+import { cookies } from 'next/headers';
+import RefreshToken from '@/components/refresh-token';
 
 export const metadata: Metadata = {
   title: 'Jobs - Jobify',
@@ -45,12 +46,13 @@ const getJobs = async (token: string, params?: params) => {
   if (response.msg === 'SUCCESS') {
     return response;
   } else {
-    throw new Error(response.msg);
+    return response;
   }
 };
 
 const Page = async ({ searchParams }: PropsJobs) => {
-  const session = await useAuthSession();
+  const cookie = cookies();
+  const token = cookie.get('access_token')?.value;
 
   const params = {
     page: searchParams?.page || '1',
@@ -60,7 +62,11 @@ const Page = async ({ searchParams }: PropsJobs) => {
     jobType: searchParams?.jobType || 'all',
   };
 
-  const data = await getJobs(session?.token ?? '', params);
+  const data = await getJobs(token ?? '', params);
+
+  if (data.msg === 'authentication invalid') {
+    return <RefreshToken />;
+  }
 
   return (
     <div className='px-2 flex flex-col gap-4'>
@@ -87,7 +93,7 @@ const Page = async ({ searchParams }: PropsJobs) => {
             placeholder='Sort by'
             defaultValue={searchParams?.sort || 'newest'}
           />
-          <AddJobForm token={session?.token ?? ''} />
+          <AddJobForm token={token ?? ''} />
         </div>
       </div>
       <div className='mt-4'>
@@ -137,8 +143,8 @@ const Page = async ({ searchParams }: PropsJobs) => {
                   </div>
                 </div>
                 <div className='flex gap-4 mt-4'>
-                  <UpdateJob _id={value._id} token={session?.token ?? ''} />
-                  <DeleteJob _id={value._id} token={session?.token ?? ''} />
+                  <UpdateJob _id={value._id} token={token ?? ''} />
+                  <DeleteJob _id={value._id} token={token ?? ''} />
                 </div>
               </div>
             </CardContent>

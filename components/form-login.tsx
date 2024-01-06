@@ -3,14 +3,12 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TloginSchema, loginSchema } from '@/types';
-import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { signIn } from 'next-auth/react';
 import { useState } from 'react';
+import { API } from '@/config';
+import { setCookie } from 'cookies-next';
 
 const FormLogin = () => {
-  const router = useRouter();
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
@@ -23,33 +21,34 @@ const FormLogin = () => {
   });
 
   const onSubmit = async (values: TloginSchema) => {
-    const signInData = await signIn('credentials', {
-      email: values.email,
-      password: values.password,
-      redirect: false,
-    });
-    if (signInData?.ok) {
-      await router.push('/dashboard');
-      toast.success('Welcome to dashboard');
+    const response = await API.POST('/auth/login', values);
+
+    if (response.msg === 'SUCCESS') {
+      await setCookie('access_token', response.token);
+      await setCookie('refresh_token', response.refreshToken);
       reset();
+      window.location.reload();
     } else {
-      toast.error(signInData?.error);
+      toast.error(response.msg);
     }
   };
 
   const onSubmitTestUser = async () => {
-    setIsLoading(true);
-    const signInData = await signIn('credentials', {
+    const payload = {
       email: 'test@test.com',
       password: 'secret123',
-      redirect: false,
-    });
-    if (signInData?.ok) {
-      await router.push('/dashboard');
-      toast.success('Take a test drive');
+    };
+
+    setIsLoading(true);
+    const response = await API.POST('/auth/login', payload);
+    if (response.msg === 'SUCCESS') {
+      await setCookie('access_token', response.token);
+      await setCookie('refresh_token', response.refreshToken);
+      reset();
+      window.location.reload();
       setIsLoading(false);
     } else {
-      toast.error(signInData?.error);
+      toast.error(response.msg);
       setIsLoading(false);
     }
   };

@@ -1,11 +1,5 @@
 import React from 'react';
 import SideNav from '@/components/sidenav';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Dashboard - Jobify',
-  description: 'Dashboard - Jobify',
-};
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

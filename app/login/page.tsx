@@ -1,8 +1,6 @@
 import FormLogin from '@/components/form-login';
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import useAuthSession from '@/lib/useAuthSession';
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Metadata } from 'next';
 
@@ -12,12 +10,6 @@ export const metadata: Metadata = {
 };
 
 const Page = async () => {
-  const session = await useAuthSession();
-
-  if (session) {
-    redirect('/dashboard');
-  }
-
   return (
     <div className='flex items-center justify-center min-h-screen'>
       <Card>

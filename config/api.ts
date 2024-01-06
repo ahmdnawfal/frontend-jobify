@@ -1,3 +1,5 @@
+'use server';
+
 import axios from 'axios';
 
 export const GET = async (path: string, token: string, params?: any) => {
@@ -42,7 +44,7 @@ export const POST = async (path: string, data: any, token?: string) => {
   }
 };
 
-export const PATCH = async (path: string, data: any, token: string) => {
+export const PATCH = async (path: string, data: any, token?: string) => {
   const header = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token || null}`,
@@ -63,7 +65,7 @@ export const PATCH = async (path: string, data: any, token: string) => {
   }
 };
 
-export const PATCH_UPLOAD = async (path: string, data: any, token: string) => {
+export const PATCH_UPLOAD = async (path: string, data: any, token?: string) => {
   const header = {
     'Content-Type': 'multipart/form-data',
     Authorization: `Bearer ${token || null}`,
@@ -90,7 +92,7 @@ export const PATCH_UPLOAD = async (path: string, data: any, token: string) => {
   }
 };
 
-export const DELETE = async (path: string, token: string) => {
+export const DELETE = async (path: string, token?: string) => {
   const header = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token || null}`,

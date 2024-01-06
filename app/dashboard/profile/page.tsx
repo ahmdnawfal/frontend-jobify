@@ -1,11 +1,11 @@
-import EditProfile from '@/components/edit-profile';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { API } from '@/config';
-import useAuthSession from '@/lib/useAuthSession';
 import { RxAvatar } from 'react-icons/rx';
 import { Metadata } from 'next';
 import Image from 'next/image';
+import { API } from '@/config';
+import RefreshToken from '@/components/refresh-token';
+import { cookies } from 'next/headers';
 
 export const metadata: Metadata = {
   title: 'Profile - Jobify',
@@ -15,16 +15,18 @@ export const metadata: Metadata = {
 const getProfile = async (token: string) => {
   const response = await API.GET('/users/profile', token);
 
-  if (response.msg === 'SUCCESS') {
-    return response;
-  } else {
-    throw new Error(response.msg);
-  }
+  return response;
 };
 
 const Page = async () => {
-  const session = await useAuthSession();
-  const data = await getProfile(session?.token ?? '');
+  const cookie = cookies();
+  const token = cookie.get('access_token')?.value;
+
+  const data = await getProfile(token ?? '');
+
+  if (data.msg === 'authentication invalid') {
+    return <RefreshToken />;
+  }
 
   return (
     <div>
@@ -46,7 +48,7 @@ const Page = async () => {
                   <RxAvatar className='text-5xl' />
                 )}
               </div>
-              <EditProfile data={data} token={session?.token ?? ''} />
+              {/* <EditProfile data={data} token={session?.token ?? ''} /> */}
             </div>
             <div className='flex flex-col gap-2 text-gray-500'>
               <div className='flex flex-col md:grid md:grid-cols-2'>

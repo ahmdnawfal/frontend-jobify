@@ -1,18 +1,16 @@
 'use client';
 
-import { signOut } from 'next-auth/react';
+import { deleteCookie } from 'cookies-next';
 import { PiSignOut } from 'react-icons/pi';
 
 const ButtonLogout = () => {
   const handleLogout = async () => {
-    signOut({
-      redirect: true,
-      callbackUrl: `${window.location.origin}/login`,
-    });
-
-    return await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`, {
+    deleteCookie('access_token');
+    deleteCookie('refresh_token');
+    await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`, {
       method: 'POST',
     });
+    window.location.reload();
   };
 
   return (
