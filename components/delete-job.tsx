@@ -14,7 +14,7 @@ const DeleteJob = ({ _id, token }: { _id: string; token: string }) => {
     const response = await API.DELETE(`/jobs/${id}`, token);
 
     if (response.msg === 'SUCCESS') {
-      toast.success('Successfully edit job');
+      toast.success('Successfully delete job');
       await customRevalidateTag('/dashboard/jobs');
     } else {
       toast.error(response.msg);
