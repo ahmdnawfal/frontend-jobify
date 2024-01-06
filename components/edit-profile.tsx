@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import { customRevalidateTag } from '@/lib/action';
 import { FaRegEdit } from 'react-icons/fa';
 import { API } from '@/config';
+import { refreshTokenHandler } from '@/config/refreshToken';
 
 const EditProfile = ({ token, data }: { token: string; data: any }) => {
   const [open, setOpen] = useState<boolean>(false);
@@ -49,6 +50,9 @@ const EditProfile = ({ token, data }: { token: string; data: any }) => {
       toast.success('Successfully edit profile');
       await customRevalidateTag('/dashboard/profile');
       setOpen(false);
+    } else if (response.msg === 'authentication invalid') {
+      refreshTokenHandler();
+      toast.info('try again');
     } else {
       toast.error(response.msg);
     }

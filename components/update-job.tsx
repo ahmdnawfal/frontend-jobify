@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Loading from '@/app/loading';
 import { API } from '@/config';
+import { refreshTokenHandler } from '@/config/refreshToken';
 
 const UpdateJob = ({ _id, token }: { _id: string; token: string }) => {
   const [open, setOpen] = useState<boolean>(false);
@@ -53,6 +54,9 @@ const UpdateJob = ({ _id, token }: { _id: string; token: string }) => {
       await customRevalidateTag('/dashboard/jobs');
       setOpen(false);
       return response;
+    } else if (response.msg === 'authentication invalid') {
+      refreshTokenHandler();
+      toast.info('try again');
     } else {
       toast.error(response.msg);
     }

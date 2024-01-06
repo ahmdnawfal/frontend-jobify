@@ -15,6 +15,7 @@ import {
 import { useState } from 'react';
 import { customRevalidateTag } from '@/lib/action';
 import { API } from '@/config';
+import { refreshTokenHandler } from '@/config/refreshToken';
 
 const AddJobForm = ({ token }: { token: string }) => {
   const [open, setOpen] = useState<boolean>(false);
@@ -36,6 +37,9 @@ const AddJobForm = ({ token }: { token: string }) => {
       setOpen(false);
       reset();
       return response;
+    } else if (response.msg === 'authentication invalid') {
+      refreshTokenHandler();
+      toast.info('try again');
     } else {
       toast.error(response.msg);
     }

@@ -5,6 +5,7 @@ import { Button } from './ui/button';
 import { toast } from 'react-toastify';
 import { customRevalidateTag } from '@/lib/action';
 import { API } from '@/config';
+import { refreshTokenHandler } from '@/config/refreshToken';
 
 const DeleteJob = ({ _id, token }: { _id: string; token: string }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -16,6 +17,9 @@ const DeleteJob = ({ _id, token }: { _id: string; token: string }) => {
     if (response.msg === 'SUCCESS') {
       toast.success('Successfully delete job');
       await customRevalidateTag('/dashboard/jobs');
+    } else if (response.msg === 'authentication invalid') {
+      refreshTokenHandler();
+      toast.info('try again');
     } else {
       toast.error(response.msg);
     }
