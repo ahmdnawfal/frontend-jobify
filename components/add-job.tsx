@@ -38,8 +38,8 @@ const AddJobForm = ({ token }: { token: string }) => {
       reset();
       return response;
     } else if (response.msg === 'authentication invalid') {
-      refreshTokenHandler();
-      toast.info('try again');
+      const refreshToken = refreshTokenHandler();
+      toast.info(refreshToken.msg);
     } else {
       toast.error(response.msg);
     }

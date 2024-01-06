@@ -29,6 +29,9 @@ const UpdateJob = ({ _id, token }: { _id: string; token: string }) => {
     const response = await API.GET(`/jobs/${id}`, token);
     if (response.msg === 'SUCCESS') {
       setData(response);
+    } else if (response.msg === 'authentication invalid') {
+      const refreshToken = refreshTokenHandler();
+      toast.info(refreshToken.msg);
     } else {
       toast.error(response.msg);
     }
@@ -53,10 +56,9 @@ const UpdateJob = ({ _id, token }: { _id: string; token: string }) => {
       toast.success('Successfully edit job');
       await customRevalidateTag('/dashboard/jobs');
       setOpen(false);
-      return response;
     } else if (response.msg === 'authentication invalid') {
-      refreshTokenHandler();
-      toast.info('try again');
+      const refreshToken = refreshTokenHandler();
+      toast.info(refreshToken.msg);
     } else {
       toast.error(response.msg);
     }

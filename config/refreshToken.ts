@@ -36,4 +36,6 @@ export const refreshTokenHandler = () => {
   };
 
   fetchData();
+
+  return { msg: 'try again!' };
 };

@@ -51,8 +51,8 @@ const EditProfile = ({ token, data }: { token: string; data: any }) => {
       await customRevalidateTag('/dashboard/profile');
       setOpen(false);
     } else if (response.msg === 'authentication invalid') {
-      refreshTokenHandler();
-      toast.info('try again');
+      const refreshToken = refreshTokenHandler();
+      toast.info(refreshToken.msg);
     } else {
       toast.error(response.msg);
     }

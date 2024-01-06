@@ -18,8 +18,8 @@ const DeleteJob = ({ _id, token }: { _id: string; token: string }) => {
       toast.success('Successfully delete job');
       await customRevalidateTag('/dashboard/jobs');
     } else if (response.msg === 'authentication invalid') {
-      refreshTokenHandler();
-      toast.info('try again');
+      const refreshToken = refreshTokenHandler();
+      toast.info(refreshToken.msg);
     } else {
       toast.error(response.msg);
     }
